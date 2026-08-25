@@ -9,16 +9,22 @@ import { clienteSupabase } from "@/lib/repo/supabase";
 export const COOKIE = "vnc_sessao";
 const DIAS = 7;
 
+/** Variável declarada sem valor chega como string vazia e passaria pelo `??`. */
+function preenchida(valor: string | undefined): string | null {
+  const limpo = valor?.trim();
+  return limpo ? limpo : null;
+}
+
 function segredo(): string {
   return (
-    process.env.ADMIN_SEGREDO ??
-    process.env.ADMIN_SENHA ??
+    preenchida(process.env.ADMIN_SEGREDO) ??
+    preenchida(process.env.ADMIN_SENHA) ??
     "vincitore-dev-nao-use-em-producao"
   );
 }
 
 function senhaLocal(): string {
-  return process.env.ADMIN_SENHA ?? "vincitore";
+  return preenchida(process.env.ADMIN_SENHA) ?? "vincitore";
 }
 
 function assinar(payload: string): string {

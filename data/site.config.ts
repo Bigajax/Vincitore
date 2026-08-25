@@ -3,14 +3,32 @@
  * Tudo que muda de loja para loja mora aqui — nada de texto institucional
  * espalhado pelas páginas.
  */
+/**
+ * Variável de ambiente vazia conta como ausente.
+ *
+ * `??` só cai no padrão quando o valor é null/undefined. Na Vercel, uma
+ * variável declarada sem valor chega como string vazia e passa direto — foi
+ * assim que `new URL("")` derrubou o build.
+ *
+ * A leitura precisa ser literal: `process.env[chave]` não é inlinado no bundle.
+ */
+function comPadrao(valor: string | undefined, padrao: string): string {
+  const limpo = valor?.trim();
+  return limpo ? limpo : padrao;
+}
+
 export const site = {
   nome: "VINCITORE",
   assinatura: "Design in Italy · Milano 1991",
   slogan: "Alfaiataria contemporânea em fios nobres.",
   descricao:
     "Moda masculina premium em Gravataí/RS. Tricôs, sobretudos, camisas e calçados em algodão egípcio, pima e fio italiano. Atendimento por WhatsApp e loja física.",
-  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://vincitore.com.br",
-  whatsapp: process.env.NEXT_PUBLIC_WHATSAPP_NUMERO ?? "5551989431465",
+  // sem barra no fim: a URL é concatenada em `${site.url}/p/${slug}`
+  url: comPadrao(process.env.NEXT_PUBLIC_SITE_URL, "https://vincitore.com.br").replace(/\/+$/, ""),
+  whatsapp: comPadrao(
+    process.env.NEXT_PUBLIC_WHATSAPP_NUMERO,
+    "5551989431465",
+  ).replace(/\D/g, ""),
   instagram: "https://www.instagram.com/vincitore.br/",
   instagramHandle: "@vincitore.br",
   tiktok: "https://www.tiktok.com/@vincitore.br",
