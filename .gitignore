@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# dados e uploads locais (modo sem Supabase)
+/.dados
+/public/uploads/*
+!/public/uploads/.gitkeep
+
+# material bruto do Instagram — não vai para o repositório
+/_fotos-ig
+!.env.example
+
+# material bruto da coleta do catálogo (ver scripts/coleta-nuvemshop/)
+/_nuvem
